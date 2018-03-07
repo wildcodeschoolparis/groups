@@ -4,10 +4,15 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   </head>
   <body>
-    <div id='results'></div>
+    <div class='container'>
+      <div id='results' class='row'></div>
+    </div>
 
+<script src='https://cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.10/seedrandom.min.js'></script>
 <script>
 const users = [
   "alex.bui",
@@ -63,6 +68,17 @@ const users = [
   "yvan.latorre",
 ]
 
+const getUrlParams = url => {
+  let hashes = url.slice(url.indexOf('?') + 1).split('&')
+  let params = {}
+  hashes.map(hash => {
+    let [key, val] = hash.split('=')
+    params[key] = decodeURIComponent(val)
+  })
+
+  return params
+}
+
 const shuffle = (array, shouldShuffleInPlace = false) => {
   let n = array.length
   let i, tmp
@@ -110,14 +126,24 @@ const splitArrayInBalancedChunks = (array, n) => {
   return chunks
 }
 
-const groups = splitArrayInBalancedChunks(shuffle(users), 8)
+const qs = window.location.search
+const params = getUrlParams(qs)
+const n = Number(params.groups) || 9
+const seed = Number(params.seed) || Math.floor(Math.random() * 10000)
+
+Math.seedrandom(seed)
+
+const groups = splitArrayInBalancedChunks(shuffle(users), n)
 const groupSizes = groups.map(g => g.length)
 
 const results = groups.map((group, i) => {
-  const title = `<h4>Group #${i + 1} (${group.length})</h4>`
-  const list = `${group.map(user => `<div>${user}</div>`).join('')}`
-
-  return `${title}${list}`
+  const title = `<h5>Group #${i + 1} (${group.length})</h5>`
+  const list = `
+    <ul class="list-group">
+      ${group.map(user => `<li class="list-group-item p-1">${user}</li>`).join('')}
+    </ul>
+  `
+  return `<div class='col-lg-3 col-md-4 col-sm-6 col-12 p-1'>${title}${list}</div>`
 }).join('')
 
 const resultsDiv = document.getElementById('results')
