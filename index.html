@@ -4,10 +4,18 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="bootstrap.min.css">
+    <link rel="stylesheet" href="custom.css">
   </head>
   <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Groups</a>
+      <form class="form-inline ml-auto">
+        <input id="input-n" class="form-control mr-sm-2 bg-dark" placeholder="How many groups?">
+        <button id="button-n" class="btn btn-outline-light my-2 my-sm-0">Roll</button>
+      </form>
+    </nav>
     <div class='container'>
       <div id='results' class='row'></div>
     </div>
@@ -68,11 +76,11 @@ const users = [
   "yvan.latorre",
 ]
 
-const getUrlParams = url => {
-  let hashes = url.slice(url.indexOf('?') + 1).split('&')
-  let params = {}
+const getUrlParams = (url, separator = '?') => {
+  const hashes = url.slice(url.indexOf(separator) + 1).split('&')
+  const params = {}
   hashes.map(hash => {
-    let [key, val] = hash.split('=')
+    const [key, val] = hash.split('=')
     params[key] = decodeURIComponent(val)
   })
 
@@ -126,28 +134,49 @@ const splitArrayInBalancedChunks = (array, n) => {
   return chunks
 }
 
-const qs = window.location.search
+const newSeed = () => Math.floor(Math.random() * 10000)
+
+const { search: qs, hash } = window.location
 const params = getUrlParams(qs)
-const n = Number(params.groups) || 9
-const seed = Number(params.seed) || Math.floor(Math.random() * 10000)
+const n = Number(params.n) || 9
+const seed = Number(params.s) || newSeed()
 
 Math.seedrandom(seed)
+
+const search = `?n=${n}&s=${seed}`
+if (window.location.search !== search) {
+  window.location.search = search
+}
 
 const groups = splitArrayInBalancedChunks(shuffle(users), n)
 const groupSizes = groups.map(g => g.length)
 
 const results = groups.map((group, i) => {
-  const title = `<h5>Group #${i + 1} (${group.length})</h5>`
+  const title = `<h6>> group${i + 1} (${group.length})</h6>`
   const list = `
     <ul class="list-group">
-      ${group.map(user => `<li class="list-group-item p-1">${user}</li>`).join('')}
+      ${group.map(user => `<li class="list-group-item p-1 pl-2">${user}</li>`).join('')}
     </ul>
   `
-  return `<div class='col-lg-3 col-md-4 col-sm-6 col-12 p-1'>${title}${list}</div>`
+  return `<div class='col-lg-4 col-md-4 col-sm-6 col-12 pt-3'>${title}${list}</div>`
 }).join('')
 
-const resultsDiv = document.getElementById('results')
+const $ = id => document.getElementById(id)
+
+const resultsDiv = $('results')
 resultsDiv.innerHTML = results
+
+const button = $('button-n')
+const input = $('input-n')
+button.addEventListener('click', e => {
+  e.preventDefault()
+
+  const n = Number(input.value) || 9
+  const seed = newSeed()
+  const search = `?n=${n}&s=${seed}`
+
+  window.location.search = search
+})
 
 </script>
   </body>

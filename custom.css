@@ -1,0 +1,14 @@
+body, .bg-dark {
+  background-color: black!important;
+}
+
+.list-group-item {
+  background-color: #111;
+  color: #bbb;
+  border: 1px solid hsla(0, 0%, 100%, 0.1);
+}
+
+h6 {
+  color: #73f0ff;
+}
+
