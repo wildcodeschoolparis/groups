@@ -13,9 +13,20 @@ body, .bg-dark {
   font-size: 0.95rem;
 }
 
+#results {
+  animation: fadein 1s;
+  -moz-animation: fadein 1s;
+  -webkit-animation: fadein 1s;
+  -o-animation: fadein 1s;
+}
+
 h6 {
   color: #73f0ff;
   /*color: #cdff1a;*/
   font-size: 0.9rem;
 }
 
+@keyframes fadein { from { opacity:0; } to { opacity:1; } }
+@-moz-keyframes fadein { from { opacity:0; } to { opacity:1; } }
+@-webkit-keyframes fadein { from { opacity:0; } to { opacity:1; } }
+@-o-keyframes fadein { from { opacity:0; } to { opacity:1; } }
