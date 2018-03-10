@@ -12,8 +12,12 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <a class="navbar-brand" href="#">Groups</a>
       <form class="form-inline ml-auto">
-        <input id="input-n" class="form-control mr-sm-2 bg-dark" placeholder="How many groups?">
-        <button id="button-n" class="btn btn-outline-light my-2 my-sm-0">Roll</button>
+        <div class="input-group">
+          <input id="input-n" type="text" class="form-control form-control-sm bg-dark" placeholder="How many groups?" >
+          <div class="input-group-append">
+            <button id="button-n" class="btn btn-sm btn-outline-light">Roll</button>
+          </div>
+        </div>
       </form>
     </nav>
     <div class='container'>
@@ -171,7 +175,7 @@ const input = $('input-n')
 button.addEventListener('click', e => {
   e.preventDefault()
 
-  const n = Number(input.value) || 9
+  const n = Number(input.value) || Number(params.n) || 9
   const seed = newSeed()
   const search = `?n=${n}&s=${seed}`
 
