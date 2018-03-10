@@ -26,6 +26,8 @@
 
 <script src='https://cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.10/seedrandom.min.js'></script>
 <script>
+'use strict'
+
 const users = [
   "alex.bui",
   "alexis.theyssier",
@@ -130,7 +132,7 @@ const splitArrayInBalancedChunks = (array, n) => {
     sizes.push(each + (i < rest ? 1 : 0))
   }
   let i = 0
-  for (size of sizes) {
+  for (const size of sizes) {
     chunks.push(array.slice(i, i + size))
     i += size
   }
@@ -140,7 +142,7 @@ const splitArrayInBalancedChunks = (array, n) => {
 
 const newSeed = () => Math.floor(Math.random() * 10000)
 
-const { search: qs, hash } = window.location
+const qs = window.location.search
 const params = getUrlParams(qs)
 const n = Number(params.n) || 9
 const seed = Number(params.s) || newSeed()
@@ -172,14 +174,26 @@ resultsDiv.innerHTML = results
 
 const button = $('button-n')
 const input = $('input-n')
-button.addEventListener('click', e => {
-  e.preventDefault()
 
+const roll = () => {
   const n = Number(input.value) || Number(params.n) || 9
   const seed = newSeed()
   const search = `?n=${n}&s=${seed}`
 
   window.location.search = search
+}
+
+button.addEventListener('click', event => {
+  event.preventDefault()
+  roll()
+})
+
+document.addEventListener('keydown', event => {
+  const key = event.key
+
+  if (key === 'r') {
+    roll()
+  }
 })
 
 </script>
