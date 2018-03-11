@@ -116,7 +116,7 @@ const groups = splitArrayInBalancedChunks(shuffle(users), n)
 const groupSizes = groups.map(g => g.length)
 
 const copyGroup = index => {
-  const text = `group${index} [ ${groups[index].map(user => `@${user}`).join(', ')} ]`
+  const text = `group${index + 1} [ ${groups[index].map(user => `@${user}`).join(', ')} ]`
 
   copyToClipboard(text)
   copied($(`group${index + 1}`))
