@@ -1,28 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"> -->
-    <link rel="stylesheet" href="dist/bootstrap.min.css">
-    <link rel="stylesheet" href="custom.css">
-    <link rel="icon" href="favicon.png">
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <!-- <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css'> -->
+    <link rel='stylesheet' href='dist/bootstrap.min.css'>
+    <link rel='stylesheet' href='custom.css'>
+    <link rel='icon' href='favicon.png'>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">Groups</a>
-      <form class="form-inline ml-auto">
-        <div class="input-group">
-          <input id="input-n" type="text" class="form-control form-control-sm bg-dark" placeholder="How many groups?" >
-          <div class="input-group-append">
-            <button id="button-n" class="btn btn-sm btn-outline-light">Roll</button>
+    <nav class='navbar navbar-expand-lg navbar-dark bg-dark'>
+      <div class='navbar-brand'>Groups</div>
+      <form class='form-inline ml-auto'>
+        <div class='input-group'>
+          <input id='input-n' type='text' class='form-control form-control-sm bg-dark' placeholder='How many groups?' >
+          <div class='input-group-append'>
+            <button id='button-n' class='btn btn-sm btn-outline-light'>Roll</button>
           </div>
         </div>
       </form>
     </nav>
     <div class='container'>
       <div id='results' class='row'></div>
+      <textarea id='clipboard' style='opacity: 0'>Hello I'm some text</textarea>
     </div>
 
 <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/seedrandom/2.3.10/seedrandom.min.js'></script> -->
@@ -89,6 +90,14 @@ const splitArrayInBalancedChunks = (array, n) => {
   return chunks
 }
 
+const $ = id => document.getElementById(id)
+
+const resultsDiv = $('results')
+const button = $('button-n')
+const input = $('input-n')
+const clipboard = $('clipboard')
+
+
 const newSeed = () => Math.floor(Math.random() * 10000)
 
 const qs = window.location.search
@@ -106,24 +115,24 @@ if (window.location.search !== search) {
 const groups = splitArrayInBalancedChunks(shuffle(users), n)
 const groupSizes = groups.map(g => g.length)
 
-const printGroup = group => console.log(group.map(user => `@${user}`).join(', '))
+const copyGroup = index => {
+  const text = `group${index} [ ${groups[index].map(user => `@${user}`).join(', ')} ]`
+
+  copyToClipboard(text)
+  copied($(`group${index + 1}`))
+}
+
 const results = groups.map((group, i) => {
-  const title = `<h6 onclick="printGroup(groups[${i}])">> group${i + 1} (${group.length})</h6>`
+  const title = `<h6 id='group${i + 1}' onclick='copyGroup(${i})'>> group${i + 1} (${group.length})</h6>`
   const list = `
-    <ul class="list-group">
-      ${group.map(user => `<li class="list-group-item p-1 pl-2"><span class="at">@</span>${user}</li>`).join('')}
+    <ul class='list-group'>
+      ${group.map(user => `<li class='list-group-item p-1 pl-2'><span class='at'>@</span>${user}</li>`).join('')}
     </ul>
   `
   return `<div class='col-lg-4 col-md-4 col-sm-6 col-12 pt-3'>${title}${list}</div>`
 }).join('')
 
-const $ = id => document.getElementById(id)
-
-const resultsDiv = $('results')
 resultsDiv.innerHTML = results
-
-const button = $('button-n')
-const input = $('input-n')
 
 const roll = () => {
   const n = Number(input.value) || Number(params.n) || 9
@@ -131,6 +140,22 @@ const roll = () => {
   const search = `?n=${n}&s=${seed}`
 
   window.location.search = search
+}
+
+const copied = elem => {
+  const span = document.createElement('span')
+  span.setAttribute('class', 'copied')
+  const content = document.createTextNode('copied!')
+
+  span.appendChild(content)
+  elem.appendChild(span)
+  setTimeout(() => span.remove(), 200)
+}
+
+const copyToClipboard = (text = '') => {
+  clipboard.value = text
+  clipboard.select()
+  document.execCommand('copy')
 }
 
 button.addEventListener('click', event => {

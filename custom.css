@@ -22,12 +22,21 @@ body, .bg-dark {
 
 h6 {
   color: #73f0ff;
-  /*color: #cdff1a;*/
   font-size: 0.9rem;
+  cursor: pointer;
+}
+
+h6:hover {
+  color: #cdff1a;
 }
 
 .at {
   opacity: 0.1;
+}
+
+.copied {
+  color: #555;
+  margin-left: 0.5rem;
 }
 
 @keyframes fadein { from { opacity:0; } to { opacity:1; } }
