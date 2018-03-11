@@ -106,11 +106,12 @@ if (window.location.search !== search) {
 const groups = splitArrayInBalancedChunks(shuffle(users), n)
 const groupSizes = groups.map(g => g.length)
 
+const printGroup = group => console.log(group.map(user => `@${user}`).join(', '))
 const results = groups.map((group, i) => {
-  const title = `<h6>> group${i + 1} (${group.length})</h6>`
+  const title = `<h6 onclick="printGroup(groups[${i}])">> group${i + 1} (${group.length})</h6>`
   const list = `
     <ul class="list-group">
-      ${group.map(user => `<li class="list-group-item p-1 pl-2">${user}</li>`).join('')}
+      ${group.map(user => `<li class="list-group-item p-1 pl-2"><span class="at">@</span>${user}</li>`).join('')}
     </ul>
   `
   return `<div class='col-lg-4 col-md-4 col-sm-6 col-12 pt-3'>${title}${list}</div>`
