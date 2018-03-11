@@ -20,6 +20,12 @@ body, .bg-dark {
   -o-animation: fadein 1s;
 }
 
+#clipboard {
+  opacity: 0;
+  height: 0px;
+  width: 0px;
+}
+
 h6 {
   color: #73f0ff;
   font-size: 0.9rem;
