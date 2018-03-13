@@ -10,6 +10,7 @@ fork > edit `users.js` > host on github pages
 
 - set **N** (groups) in input field then roll
 - `r` key to re-roll with current **N**
+- `tab` to focus input
 - click on `> group #` labels to copy group to clipboard
 - share the url to your students
-- use rocket.chat usernames for your users
+- advice: use rocket.chat usernames for your users
