@@ -17,7 +17,7 @@ const users = [
   "francesca.ringot",
   "frederic.olive",
   "frederic.paquet",
-  "gaelle.fougre",
+  "gaelle.fougere",
   "guillaume.nobis",
   "helena.domlan",
   "helene.blanchard",
