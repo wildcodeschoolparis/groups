@@ -29,10 +29,13 @@ body, .bg-dark {
 h6 {
   color: #73f0ff;
   font-size: 0.9rem;
+}
+
+#title, h6 {
   cursor: pointer;
 }
 
-h6:hover {
+#title:hover, h6:hover {
   color: #cdff1a;
 }
 

@@ -11,7 +11,7 @@
   </head>
   <body>
     <nav class='navbar navbar-expand-lg navbar-dark bg-dark'>
-      <div class='navbar-brand'>Groups</div>
+      <div id="title" class='navbar-brand'>Groups</div>
       <form class='form-inline ml-auto'>
         <div class='input-group'>
           <input id='input-n' type='text' class='form-control form-control-sm bg-dark' placeholder='How many groups?' >
@@ -96,7 +96,7 @@ const resultsDiv = $('results')
 const button = $('button-n')
 const input = $('input-n')
 const clipboard = $('clipboard')
-
+const title = $('title')
 
 const newSeed = () => Math.floor(Math.random() * 10000)
 
@@ -111,6 +111,12 @@ const search = `?n=${n}&s=${seed}`
 if (window.location.search !== search) {
   window.location.search = search
 }
+
+const formatUser = user => `@${user}`
+const formatAll = groups => groups
+  .map(g => g.map(formatUser).join(', '))
+  .map((g, i) => `group${i+1}: ${g}`)
+  .join('\n')
 
 const groups = splitArrayInBalancedChunks(shuffle(users), n)
 const groupSizes = groups.map(g => g.length)
@@ -161,6 +167,13 @@ const copyToClipboard = (text = '') => {
 button.addEventListener('click', event => {
   event.preventDefault()
   roll()
+})
+
+title.addEventListener('click', event => {
+  const all = formatAll(groups)
+
+  copyToClipboard(all)
+  copied(event.target)
 })
 
 document.addEventListener('keydown', event => {
